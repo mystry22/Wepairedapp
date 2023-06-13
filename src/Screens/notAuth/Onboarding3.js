@@ -3,6 +3,7 @@ import { Text, Image, View, StyleSheet, Dimensions, TouchableOpacity } from "rea
 import colors from "../../Utils/color";
 import Button from '../../Reusable/OnboardButton';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const width = Dimensions.get('window').width;
 const Onboard3 = () => {
     const navigation = useNavigation();
@@ -11,8 +12,9 @@ const Onboard3 = () => {
         navigation.navigate('Signin1');
     }
 
-    const next = () => {
-        console.log('next');
+    const next = async() => {
+        await AsyncStorage.setItem('boarded','boarded');
+        navigation.navigate('Signin1');
     }
 
     const back =()=>{

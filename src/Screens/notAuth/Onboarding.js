@@ -1,11 +1,26 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { Text, Image, View, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import colors from "../../Utils/color";
 import Button from '../../Reusable/OnboardButton';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const width = Dimensions.get('window').width;
 const Onboard1 = () => {
     const navigation = useNavigation();
+
+    useEffect(()=>{
+        checkIfBoarded();
+    },[])
+
+    const checkIfBoarded = async()=>{
+        const isBoarded = await AsyncStorage.getItem('boarded');
+        if(isBoarded){
+            navigation.navigate('Signin1');
+        }else{
+            
+        }
+    }
 
     const skipNav = ()=>{
         navigation.navigate('Signin1');
