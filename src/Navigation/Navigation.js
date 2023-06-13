@@ -1,4 +1,4 @@
-import * as React from 'react';
+import  React,{useContext} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import Loader from '../Utils/Loader';
 import ReturnEval from './ReturnEval';
@@ -9,7 +9,7 @@ export default function App() {
   return (
     <NavigationContainer>
         {
-          userState == 'init' ? <Loader /> : <ReturnEval />
+          switched == 'init' ? <Loader /> : <ReturnEval />
         }
     </NavigationContainer>
   );

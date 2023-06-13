@@ -1,6 +1,6 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { devEnv } from '../Config/env';
+//import { devEnv } from '../Config/env';
 
 
 const headers = {};
