@@ -6,28 +6,44 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import CheckBox from 'react-native-check-box';
 import OnboardButton from '../../Reusable/OnboardButton';
 import { useNavigation } from '@react-navigation/native';
+import {signUp} from '../../Utils/requests';
 
 const CreateAccount = () => {
     const navigation = useNavigation();
     const [toggleCheckBox, setToggleCheckBox] = useState(false);
     const [indicate, setIndicate] = useState('no');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [pass, setPass] = useState('');
 
     const keep = () => {
         navigation.navigate('');
+    }
+
+        const signUp = async()=>{
+            const data = {
+                fname: firstName,
+                lastName: lastName,
+                email:email,
+                password: pass
+            }
+
+           const res =  await signUp(data);
     }
     return (
         <View style={style.container}>
             <Text style={style.createAccount}>CreateAccount</Text>
 
-            <Input placeholder={'Enter First Name'} password={false} onChangeText={keep} />
+            <Input placeholder={'Enter First Name'} password={false} onChangeText={(val)=>{setFirstName(val)}} />
 
-            <Input placeholder={'Enter Last Name'} password={false} onChangeText={keep} />
+            <Input placeholder={'Enter Last Name'} password={false} onChangeText={(val)=>{setLastName(val)}} />
 
-            <Input placeholder={'Enter Email'} password={false} onChangeText={keep} />
+            <Input placeholder={'Enter Email'} password={false} onChangeText={(val)=>{setEmail(val)}} />
 
             <View style={style.textInput}>
 
-                <TextInput placeholder='Enter Password' placeholderTextColor={colors.subtext} secureTextEntry={true} style={{ flex: 1, }} />
+                <TextInput placeholder='Enter Password' placeholderTextColor={colors.subtext} secureTextEntry={true} style={{ flex: 1, }} onChangeText={(val)=>setPass(val)} />
                 <AntDesign name={'eyeo'} size={28} style={{ marginRight: 10 }} />
 
             </View>
