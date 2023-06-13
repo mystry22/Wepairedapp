@@ -5,13 +5,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const headers = {};
 const AxiosInstance = axios.create({
-    baseURL: 'https://mystry22-triggerbackend.onrender.com',
+    baseURL: 'https://wepair-api.onrender.com',
     headers
 });
 
 AxiosInstance.interceptors.request.use(
     async (config) => {
-        const token = await AsyncStorage.getItem('userToken');
+        const token = await AsyncStorage.getItem('Uid');
 
         if (token) {
             config.headers.Authorization = `Bearer ${token}`
