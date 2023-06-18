@@ -3,7 +3,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 //import { devEnv } from '../Config/env';
 
 
-const headers = {};
+const headers = {
+    'Content-Type': 'application/json'
+};
 const AxiosInstance = axios.create({
     baseURL: 'https://wepair-api.onrender.com',
     headers

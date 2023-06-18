@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TextInput, TouchableWithoutFeedback } from 'react-native';
-import React,{useState} from 'react';
+import React,{useState,useContext} from 'react';
 import colors from '../../Utils/color';
 import Input from '../../Reusable/Input';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -7,8 +7,14 @@ import CheckBox from 'react-native-check-box';
 import OnboardButton from '../../Reusable/OnboardButton';
 import { useNavigation } from '@react-navigation/native';
 import {signUp} from '../../Utils/requests';
+import { checkFirstName, checkMail, checkPass } from '../../Utils/validation';
+import {AuthLoginContext} from '../../Provider/AuthLoginContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 const CreateAccount = () => {
+    const {setFname,setWitched} = useContext(AuthLoginContext);
     const navigation = useNavigation();
     const [toggleCheckBox, setToggleCheckBox] = useState(false);
     const [indicate, setIndicate] = useState('no');
@@ -16,20 +22,65 @@ const CreateAccount = () => {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
+    const [cpass, setCPass] = useState('');
+
+    
+
+
+
+
+
 
     const keep = () => {
         navigation.navigate('');
     }
 
-        const signUp = async()=>{
-            const data = {
-                fname: firstName,
-                lastName: lastName,
-                email:email,
-                password: pass
-            }
+    const validtae = ()=>{
+        const fNameError = checkFirstName(firstName);
+        const lNameError = checkFirstName(lastName);
+        const emailErr = checkMail(email);
+        const passErr = checkPass(pass);
 
-           const res =  await signUp(data);
+        if(fNameError || lNameError || emailErr || passErr || toggleCheckBox == false|| pass != cpass){
+            return 'Error';
+        }else{
+            return 'ok';
+        }
+    }
+
+    const register = async()=>{
+        setIndicate('yes');
+
+        try{
+            const val  = validtae();
+            if(val == 'ok'){
+                const data = {
+                    name: firstName,
+                    lastName: lastName,
+                    email:email,
+                    password: pass
+                }
+                const res =  await signUp(data);   
+                if(res.status == 'sucess')  {
+                    setIndicate('no');
+                    setFname(res.name);
+                    await AsyncStorage.setItem('Uid',res.message._id);
+                    setWitched('avail');
+                }else{
+                    console.log('Error creating user')
+                }
+            }else{
+                setIndicate('no');
+                console.log('Validation Erro');
+            }
+        }catch(err){
+            console.log(err)
+        }
+        
+
+        
+
+           
     }
     return (
         <View style={style.container}>
@@ -50,7 +101,7 @@ const CreateAccount = () => {
 
             <View style={style.textInput}>
 
-                <TextInput placeholder='Confirm Password' placeholderTextColor={colors.subtext} secureTextEntry={true} style={{ flex: 1, }} />
+                <TextInput placeholder='Confirm Password' placeholderTextColor={colors.subtext} secureTextEntry={true} style={{ flex: 1, }} onChangeText={(val)=>setCPass(val)} />
                 <AntDesign name={'eyeo'} size={28} style={{ marginRight: 10 }} />
 
             </View>
@@ -58,7 +109,7 @@ const CreateAccount = () => {
             <View style={{ flexDirection: 'row', justifyContent:'center', alignContent:'center' }}>
                 <CheckBox isChecked={toggleCheckBox}
                     onClick={() => setToggleCheckBox(!toggleCheckBox)}
-                    checkBoxColor='#3A00E5'
+                    checkBoxColor='#0072C6'
                 />
 
                 <Text style={{color:'#131313', fontWeight:'400'}}> By creating an account you agree to the terms of use
@@ -66,7 +117,7 @@ const CreateAccount = () => {
 
             </View>
 
-            <OnboardButton title={'Sign up'} indicate={indicate} onpress={keep} />
+            <OnboardButton title={'Sign up'} indicate={indicate} onpress={()=>{register()}} />
 
             <Text style={{ marginTop: 30, textAlign: 'center', fontWeight: '400', marginBottom: 20 }}>OR</Text>
 

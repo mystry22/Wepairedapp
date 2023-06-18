@@ -8,20 +8,24 @@ export const GlobalAuthContext = ({children})=>{
     const [changes,setChanges] = useState('');
     const [userDetail,setUserDetails] = useState('');
     const [switched,setWitched] = useState('init');
-    const [share,setShare] = useState('');
-    const [transaction, setTransactions] = useState([]);
-    const [graphData,setGraphData] = useState([]);
+    const [fname,setFname] = useState('');
+    const [lname,setFLame] = useState('');
+    const [email,setEmail] = useState('');
+    const [bio,setBio] = useState('');
+
+
+
 
 
 
     useEffect(()=>{
         evalScreen();
-        getUserDetails();
-        checkChanges();
+        // getUserDetails();
+        // checkChanges();
     },[switched,changes])
 
     const evalScreen = async()=>{
-        const token = await AsyncStorage.getItem('userToken');
+        const token = await AsyncStorage.getItem('Uid');
         if(token){
             setWitched('avail');
         }else{
@@ -30,7 +34,7 @@ export const GlobalAuthContext = ({children})=>{
     }
 
     const getUserDetails = ()=>{
-        AsyncStorage.getItem('userToken').then(token =>{
+        AsyncStorage.getItem('Uid').then(token =>{
 
             if(token){
                 userInformation(token).then(res=>{
@@ -67,7 +71,7 @@ export const GlobalAuthContext = ({children})=>{
     
     
     
-    return <AuthLoginContext.Provider value={{userDetail,switched,setWitched,setChanges,share,transaction,graphData,setWitched}}>
+    return <AuthLoginContext.Provider value={{switched,setWitched,setFname}}>
         {children}
     </AuthLoginContext.Provider>
 }
