@@ -31,8 +31,8 @@ const CreateAccount = () => {
 
 
 
-    const keep = () => {
-        navigation.navigate('');
+    const login = () => {
+        navigation.navigate('Signin1');
     }
 
     const validtae = ()=>{
@@ -124,7 +124,7 @@ const CreateAccount = () => {
             <View style={{flexDirection:'row', justifyContent:'center'}}>
 
                 <Text style={{fontWeight:'400', color:'#131313'}}>Already have an account? </Text>
-                <TouchableWithoutFeedback onPress={keep} >
+                <TouchableWithoutFeedback onPress={login} >
 
                     <Text style={{color:'#0072C6',fontWeight:'400'}}>Log in</Text>
                 </TouchableWithoutFeedback>
