@@ -6,26 +6,58 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import CheckBox from 'react-native-check-box';
 import OnboardButton from '../../Reusable/OnboardButton';
 import { useNavigation } from '@react-navigation/native';
-
-
+import { checkMail, checkPass } from '../../Utils/validation';
+import {signIn} from '../../Utils/requests';
 
 
 const PersonalInformations = () => {
     const navigation = useNavigation();
     const [toggleCheckBox, setToggleCheckBox] = useState(false);
     const [indicate, setIndicate] = useState('no');
+    const [email, setEmail] = useState('');
+    const [pass, setPass] = useState('');
+
 
 
     const navChangePass =()=>{
         navigation.navigate('ChangePassword');
     }
 
-    const randomDo = () => {
-        console.log('ok')
+    const validation = () => {
+        const emailErr = checkMail(email);
+        const passErr = checkPass(pass);
+
+        if(emailErr || passErr){
+            return 'Error'
+        }else{
+            return 'Ok';
+        }
     }
 
-    const login = () => {
-        console.log('login')
+    const login = async() => {
+        setIndicate('yes');
+        const val = validation();
+
+        if(val == 'Ok'){
+            try{
+            const data = {
+                email: email,
+                password: pass
+            }
+            const res = await signIn(data);
+            if(res.status == 'true'){
+                setIndicate('no');
+                
+            }else{
+                setIndicate('no');
+            }
+            }catch(err){
+
+            }
+        }else{
+            setIndicate('no');
+            console.log('not okay');
+        }
     }
 
     const gesture =()=>{
@@ -38,11 +70,12 @@ const PersonalInformations = () => {
             <Text style={style.welcome}>Hi,Welcome Back! </Text>
             <Text style={style.subtext}>Hello again,you’ve been missed!</Text>
 
-            <Input placeholder='Email' password={false} onChangeText={randomDo} />
+            <Input placeholder='Email' password={false} onChangeText={(val)=>{setEmail(val)}} />
 
             <View style={style.textInput}>
 
-                <TextInput placeholder='Enter Password' placeholderTextColor={colors.subtext} secureTextEntry={true} style={{ flex: 1, }} />
+                <TextInput placeholder='Enter Password' placeholderTextColor={colors.subtext} secureTextEntry={true} style={{ flex: 1, }} 
+                onChangeText={(val)=>{setPass(val)}} />
                 <AntDesign name={'eyeo'} size={28} style={{ marginRight: 10 }} />
 
             </View>

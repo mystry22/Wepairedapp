@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const CreateAccount = () => {
-    const {setFname,setWitched} = useContext(AuthLoginContext);
+    const {setFname,setWitched,setLName,setMail,setBio} = useContext(AuthLoginContext);
     const navigation = useNavigation();
     const [toggleCheckBox, setToggleCheckBox] = useState(false);
     const [indicate, setIndicate] = useState('no');
@@ -63,7 +63,10 @@ const CreateAccount = () => {
                 const res =  await signUp(data);   
                 if(res.status == 'sucess')  {
                     setIndicate('no');
-                    setFname(res.name);
+                    setFname(res.message.name);
+                    setMail(res.message.email);
+                    setLName(res.message.lastName);
+                    setBio(res.message.bio);
                     await AsyncStorage.setItem('Uid',res.message._id);
                     setWitched('avail');
                 }else{
