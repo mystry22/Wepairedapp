@@ -1,5 +1,5 @@
-import { Image, Text,ActivityIndicator,StyleSheet,SafeAreaView,Linking } from 'react-native';
-import React,{useEffect} from 'react';
+import { Image,Text,StyleSheet,SafeAreaView,Linking } from 'react-native';
+import React from 'react';
 import colors from '../../Utils/color';
 import OnboardButton from '../../Reusable/OnboardButton';
 import { useNavigation } from '@react-navigation/native';
@@ -8,9 +8,7 @@ const VideoConference = () => {
     const navigation = useNavigation();
     const url = 'https://wepair-api.onrender.com';
 
-    useEffect(()=>{
-        loadUrl();
-    },[]);
+    
 
     const stopVideo = ()=>{
         navigation.navigate('Home');
@@ -24,10 +22,9 @@ const VideoConference = () => {
   return (
     <SafeAreaView style={style.loader}>
         <Image source={require('../../Assets/logo.png' )} style={style.img} />
-        <ActivityIndicator size={'large'} color={colors.btn} />
-
-        <Text style={style.belowText}>Please Wait ...</Text>
-        <OnboardButton title={'Stop Video'} onpress={stopVideo} />
+        <Text style={style.belowText}>You don't have to imagine when you can see</Text>
+        <OnboardButton title={'Launch Video Call'}  onpress={loadUrl}/>
+        <OnboardButton title={'Exit'} onpress={stopVideo} />
     </SafeAreaView>
   )
 }

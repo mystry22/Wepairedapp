@@ -3,7 +3,7 @@ import { Text, View, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Home from "../Screens/auth/Home";
+import Home from "../Navigation/HomeCommunityMenu";
 import Profile from "../Screens/auth/Profile";
 import VideoConference from '../Screens/auth/VideoConference';
 import Chat from "../Navigation/ChatMenu";
