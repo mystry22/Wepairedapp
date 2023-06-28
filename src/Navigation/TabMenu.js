@@ -2,9 +2,10 @@ import React from "react";
 import { Text, View, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Home from "../Screens/auth/Home";
 import Profile from "../Screens/auth/Profile";
-import Community from "../Screens/auth/Community";
+import VideoConference from '../Screens/auth/VideoConference';
 import Chat from "../Navigation/ChatMenu";
 import colors from "../Utils/color";
 const Nav = createBottomTabNavigator();
@@ -36,11 +37,11 @@ const TabMenu = () => {
                 )
             }} />
 
-            <Nav.Screen name="Community" component={Community} options={{
+            <Nav.Screen name="VideoConference" component={VideoConference} options={{
                 tabBarIcon: () => (
                     <View style={style.allig}>
-                        <Ionicons name='people-outline' size={28} color={colors.dark} />
-                        <Text style={style.menuText}>Community</Text>
+                        <AntDesign name='videocamera' size={28} color={colors.dark} />
+                        <Text style={style.menuText}>Video</Text>
                     </View>
                 )
             }} />

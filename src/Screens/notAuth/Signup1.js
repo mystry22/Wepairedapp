@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableWithoutFeedback,Alert } from 'react-native';
 import React,{useState,useContext} from 'react';
 import colors from '../../Utils/color';
 import Input from '../../Reusable/Input';
@@ -24,13 +24,17 @@ const CreateAccount = () => {
     const [pass, setPass] = useState('');
     const [cpass, setCPass] = useState('');
 
-    
 
-
-
-
-
-
+    const showToast =(erMsg)=>{
+        Alert.alert('Notification', erMsg, [
+            {
+              text: 'Cancel',
+              onPress: () => {},
+              style: 'cancel',
+            },
+            
+          ]);
+    }
     const login = () => {
         navigation.navigate('Signin1');
     }
@@ -40,6 +44,7 @@ const CreateAccount = () => {
         const lNameError = checkFirstName(lastName);
         const emailErr = checkMail(email);
         const passErr = checkPass(pass);
+        
 
         if(fNameError || lNameError || emailErr || passErr || toggleCheckBox == false|| pass != cpass){
             return 'Error';
@@ -67,14 +72,15 @@ const CreateAccount = () => {
                     setMail(res.message.email);
                     setLName(res.message.lastName);
                     setBio(res.message.bio);
-                    await AsyncStorage.setItem('Uid',res.message._id);
+                    await AsyncStorage.setItem('Uid',res.Token);
                     setWitched('avail');
                 }else{
-                    console.log('Error creating user')
+                    setIndicate('no');
+                    showToast(res.Error);
                 }
             }else{
                 setIndicate('no');
-                console.log('Validation Erro');
+                showToast('One or more validations not met');
             }
         }catch(err){
             console.log(err)

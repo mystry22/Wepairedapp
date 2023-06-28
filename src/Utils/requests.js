@@ -23,9 +23,32 @@ const signUp = async(data)=>{
 }
 
 const signIn = async(data)=>{
-    const res = await AxiosInstance.post('/api/v1/user/login',data);
-    return res.data;
+    const response = await fetch('https://wepair-api.onrender.com/api/v1/user/login',
+    {
+        method:'POST', 
+        body:JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    const res = response.json();
+    return res;
     
+}
+
+const getUserDetails = async()=>{
+    const token = await AsyncStorage.getItem('Uid');
+    const response = await fetch('https://wepair-api.onrender.com/api/v1/posts',
+    {
+        method:'GET',
+        headers: {
+            'auth-token': token
+        }
+    });
+
+    const res = response.json();
+    return res;
 }
 
 
@@ -36,4 +59,5 @@ const signIn = async(data)=>{
 export {
     signUp,
     signIn,
+    getUserDetails
 } 

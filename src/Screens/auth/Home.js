@@ -1,9 +1,25 @@
 import { View, Text, StyleSheet, ScrollView, Image, TouchableWithoutFeedback, TextInput, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React,{useEffect,useContext} from 'react';
 import colors from '../../Utils/color';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {getUserDetails} from '../../Utils/requests';
+import {AuthLoginContext} from '../../Provider/AuthLoginContext'
 
 const Home = () => {
+    const {setFname,setLName,setMail,setBio} = useContext(AuthLoginContext);
+
+
+    useEffect(()=>{
+        getAllUsers();
+    },[])
+    const getAllUsers = async()=>{
+        const res = await getUserDetails();
+        setFname(res.postUser.name);
+        setLName(res.postUser.lastName);
+        setMail(res.postUser.email);
+        setBio(res.postUser.bio);
+
+    }
 
     const keeps = () => {
         console.log('ok');

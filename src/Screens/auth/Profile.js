@@ -12,7 +12,7 @@ import {AuthLoginContext} from '../../Provider/AuthLoginContext';
 
 
 const Profile = () => {
-  const {setFname,setWitched} = useContext(AuthLoginContext);
+  const {fname,lname,setWitched,bio} = useContext(AuthLoginContext);
   const navigation = useNavigation();
 
   const nav = () => {
@@ -44,10 +44,10 @@ const Profile = () => {
         <Image source={require('../../Assets/person.png')} style={style.image_profile} />
 
         <View>
-          <Text style={style.nameText}>Idowu Adebisi</Text>
+          <Text style={style.nameText}>{fname } {lname}</Text>
 
           <Text style={style.bioText}>
-            I am a modern woman living with a special ability. I am audacious and a goal getter.
+            {bio}
           </Text>
 
         </View>
@@ -148,7 +148,7 @@ const style = StyleSheet.create({
     fontWeight: '400'
   },
   bioText: {
-    fontSize: 10,
+    fontSize: 12,
     color: colors.subtext,
     fontWeight: 400
   },

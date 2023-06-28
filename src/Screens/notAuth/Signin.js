@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, TextInput,TouchableWithoutFeedback } from 'react-native';
-import React, { useState,  } from 'react';
+import { View, Text, StyleSheet, TextInput,TouchableWithoutFeedback, Alert } from 'react-native';
+import React, { useContext, useState,  } from 'react';
 import colors from '../../Utils/color';
 import Input from '../../Reusable/Input';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -8,14 +8,30 @@ import OnboardButton from '../../Reusable/OnboardButton';
 import { useNavigation } from '@react-navigation/native';
 import { checkMail, checkPass } from '../../Utils/validation';
 import {signIn} from '../../Utils/requests';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AuthLoginContext} from '../../Provider/AuthLoginContext';
 
 
 const PersonalInformations = () => {
-    const navigation = useNavigation();
     const [toggleCheckBox, setToggleCheckBox] = useState(false);
     const [indicate, setIndicate] = useState('no');
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
+    const {setWitched} = useContext(AuthLoginContext);
+    const navigation = useNavigation();
+
+    
+
+    const showToast =(erMsg)=>{
+        Alert.alert('Notification', erMsg, [
+            {
+              text: 'Cancel',
+              onPress: () => {},
+              style: 'cancel',
+            },
+            
+          ]);
+    }
 
 
 
@@ -45,18 +61,21 @@ const PersonalInformations = () => {
                 password: pass
             }
             const res = await signIn(data);
-            if(res.status == 'true'){
+            if(res.success == 'True'){
                 setIndicate('no');
+                await AsyncStorage.setItem('Uid',res.Token);
+                setWitched('avail');
                 
             }else{
                 setIndicate('no');
+                showToast('Invalid login details');
             }
             }catch(err){
-
+                console.log(err);
             }
         }else{
             setIndicate('no');
-            console.log('not okay');
+            showToast('One or more fields failed validation');
         }
     }
 
