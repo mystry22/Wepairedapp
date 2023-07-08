@@ -41,7 +41,7 @@ const Profile = () => {
 
       {/* Profile */}
       <View style={{ flexDirection: 'row', marginTop: 20 }}>
-        <Image source={require('../../Assets/person.png')} style={style.image_profile} />
+        <Image source={require('../../Assets/profile.png')} style={style.image_profile} />
 
         <View>
           <Text style={style.nameText}>{fname } {lname}</Text>

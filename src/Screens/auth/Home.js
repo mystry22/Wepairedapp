@@ -5,14 +5,17 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { getUserDetails } from '../../Utils/requests';
 import { AuthLoginContext } from '../../Provider/AuthLoginContext';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const Home = () => {
     const navigation = useNavigation();
-    const { setFname, setLName, setMail, setBio } = useContext(AuthLoginContext);
+    const { setFname, setLName, setMail, setBio, setUserID } = useContext(AuthLoginContext);
 
 
     useEffect(() => {
         getAllUsers();
+        
     }, [])
     const getAllUsers = async () => {
         const res = await getUserDetails();
@@ -20,6 +23,7 @@ const Home = () => {
         setLName(res.postUser.lastName);
         setMail(res.postUser.email);
         setBio(res.postUser.bio);
+        setUserID(res.postUser._id);
 
     }
 
@@ -27,67 +31,82 @@ const Home = () => {
         console.log('ok');
     }
 
+    const gotochat =  () => {
+
+         AsyncStorage.setItem('chatName', 'The Deaf Community').then(res =>{
+            navigation.navigate('Chating',{ screen: 'ChatScreen' });
+         })
+        //await AsyncStorage.setItem('chatImg', 'deaf_community.png');
+
+        
+        
+
+
+    }
+
     const goToCreate = () => {
         navigation.navigate('CreateCommunity');
     }
     return (
         <ScrollView style={style.container}>
-            
-                {/* community text */}
-                <Text style={style.boldTitle}>New Community</Text>
 
-                <Text style={style.forums}>Forums</Text>
-                {/* Forum Scroll */}
-                <ScrollView horizontal={true} style={{ marginBottom: 10 }}>
+            {/* community text */}
+            <Text style={style.boldTitle}>New Community</Text>
 
-                    <View style={style.forumsList}>
-                        <Image source={require('../../Assets/politics.png')} style={style.images} />
-                        <Text style={style.forumText}>Politics</Text>
-                    </View>
-                    <View style={style.forumsList}>
-                        <Image source={require('../../Assets/football.png')} style={style.images} />
-                        <Text style={style.forumText}>Football</Text>
-                    </View>
-                    <View style={style.forumsList}>
-                        <Image source={require('../../Assets/game.png')} style={style.images} />
-                        <Text style={style.forumText}>Games</Text>
-                    </View>
-                    <View style={style.forumsList}>
-                        <Image source={require('../../Assets/music.png')} style={style.images} />
-                        <Text style={style.forumText}>Music</Text>
-                    </View>
-                    <View style={style.forumsList}>
-                        <Image source={require('../../Assets/comedy.png')} style={style.images} />
-                        <Text style={style.forumText}>Comedy</Text>
-                    </View>
+            <Text style={style.forums}>Forums</Text>
+            {/* Forum Scroll */}
+            <ScrollView horizontal={true} style={{ marginBottom: 10 }}>
 
-                </ScrollView>
-
-                {/* community and Search Box */}
-
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-
-                    <Text style={style.forums}>Community</Text>
-
-                    <TouchableWithoutFeedback onPress={goToCreate}>
-                        <Text style={{ color: colors.btn, fontSize: 14, fontWeight: '400', marginTop: 3 }} >Create new community</Text>
-                    </TouchableWithoutFeedback>
-
+                <View style={style.forumsList}>
+                    <Image source={require('../../Assets/politics.png')} style={style.images} />
+                    <Text style={style.forumText}>Politics</Text>
+                </View>
+                <View style={style.forumsList}>
+                    <Image source={require('../../Assets/football.png')} style={style.images} />
+                    <Text style={style.forumText}>Football</Text>
+                </View>
+                <View style={style.forumsList}>
+                    <Image source={require('../../Assets/game.png')} style={style.images} />
+                    <Text style={style.forumText}>Games</Text>
+                </View>
+                <View style={style.forumsList}>
+                    <Image source={require('../../Assets/music.png')} style={style.images} />
+                    <Text style={style.forumText}>Music</Text>
+                </View>
+                <View style={style.forumsList}>
+                    <Image source={require('../../Assets/comedy.png')} style={style.images} />
+                    <Text style={style.forumText}>Comedy</Text>
                 </View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 30 }}>
+            </ScrollView>
 
-                    <View style={style.searchBox}>
-                        <TextInput style={{ flex: 1, paddingLeft: 10 }} onChangeText={keeps} placeholder='Search for community' />
-                    </View>
+            {/* community and Search Box */}
 
-                    <TouchableOpacity onPress={keeps} style={style.searchButton}>
-                        <AntDesign name={'search1'} size={20} color={'#ffffff'} />
-                    </TouchableOpacity>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
+                <Text style={style.forums}>Community</Text>
+
+                <TouchableWithoutFeedback onPress={goToCreate}>
+                    <Text style={{ color: colors.btn, fontSize: 14, fontWeight: '400', marginTop: 3 }} >Create new community</Text>
+                </TouchableWithoutFeedback>
+
+            </View>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 30 }}>
+
+                <View style={style.searchBox}>
+                    <TextInput style={{ flex: 1, paddingLeft: 10 }} onChangeText={keeps} placeholder='Search for community' />
                 </View>
 
-                {/* Default Communities */}
+                <TouchableOpacity onPress={keeps} style={style.searchButton}>
+                    <AntDesign name={'search1'} size={20} color={'#ffffff'} />
+                </TouchableOpacity>
+
+            </View>
+
+            {/* Default Communities */}
+
+            <TouchableWithoutFeedback onPress={gotochat}>
 
                 <View style={style.communityContainer}>
                     <View style={style.holdCommunity}>
@@ -101,47 +120,49 @@ const Home = () => {
 
                     <AntDesign name='right' size={28} style={{ paddingTop: 10 }} />
                 </View>
+            </TouchableWithoutFeedback>
 
-                <View style={style.communityContainer}>
-                    <View style={style.holdCommunity}>
-                        <Image source={require('../../Assets/mute_community.png')} style={style.communityImage} />
 
-                        <View style={{ marginLeft: 10, paddingTop: 10 }}>
-                            <Text style={style.titleCommunity}>The Mute Community</Text>
-                            <Text style={style.subTextCommunity}>We dream big over here </Text>
-                        </View>
+            <View style={style.communityContainer}>
+                <View style={style.holdCommunity}>
+                    <Image source={require('../../Assets/mute_community.png')} style={style.communityImage} />
+
+                    <View style={{ marginLeft: 10, paddingTop: 10 }}>
+                        <Text style={style.titleCommunity}>The Mute Community</Text>
+                        <Text style={style.subTextCommunity}>We dream big over here </Text>
                     </View>
-
-                    <AntDesign name='right' size={28} style={{ paddingTop: 10 }} />
                 </View>
 
+                <AntDesign name='right' size={28} style={{ paddingTop: 10 }} />
+            </View>
 
-                <View style={style.communityContainer}>
-                    <View style={style.holdCommunity}>
-                        <Image source={require('../../Assets/gospel_community.png')} style={style.communityImage} />
 
-                        <View style={{ marginLeft: 10, paddingTop: 10 }}>
-                            <Text style={style.titleCommunity}>The Gospel Community</Text>
-                            <Text style={style.subTextCommunity}>The beauty of the Gospel </Text>
-                        </View>
+            <View style={style.communityContainer}>
+                <View style={style.holdCommunity}>
+                    <Image source={require('../../Assets/gospel_community.png')} style={style.communityImage} />
+
+                    <View style={{ marginLeft: 10, paddingTop: 10 }}>
+                        <Text style={style.titleCommunity}>The Gospel Community</Text>
+                        <Text style={style.subTextCommunity}>The beauty of the Gospel </Text>
                     </View>
-
-                    <AntDesign name='right' size={28} style={{ paddingTop: 10 }} />
                 </View>
 
+                <AntDesign name='right' size={28} style={{ paddingTop: 10 }} />
+            </View>
 
-                <View style={style.communityContainer}>
-                    <View style={style.holdCommunity}>
-                        <Image source={require('../../Assets/general_community.png')} style={style.communityImage} />
 
-                        <View style={{ marginLeft: 10, paddingTop: 10 }}>
-                            <Text style={style.titleCommunity}>The General Community</Text>
-                            <Text style={style.subTextCommunity}>Meet new people share your views </Text>
-                        </View>
+            <View style={style.communityContainer}>
+                <View style={style.holdCommunity}>
+                    <Image source={require('../../Assets/general_community.png')} style={style.communityImage} />
+
+                    <View style={{ marginLeft: 10, paddingTop: 10 }}>
+                        <Text style={style.titleCommunity}>The General Community</Text>
+                        <Text style={style.subTextCommunity}>Meet new people share your views </Text>
                     </View>
-
-                    <AntDesign name='right' size={28} style={{ paddingTop: 10 }} />
                 </View>
+
+                <AntDesign name='right' size={28} style={{ paddingTop: 10 }} />
+            </View>
 
         </ScrollView>
     )

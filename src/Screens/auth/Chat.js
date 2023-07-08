@@ -1,13 +1,40 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, TouchableWithoutFeedback } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import colors from '../../Utils/color';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
+import io from 'socket.io-client';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const Chat = () => {
     const navigation = useNavigation();
-    const keeps = () => {
-        navigation.navigate('ChatScreen');
+    const [allRooms, setAllRooms] = useState([]);
+
+    const gotoRoom = (name) => {
+    
+        AsyncStorage.setItem('chatName', name).then(res =>{
+            navigation.navigate('ChatScreen');
+         })
+    }
+
+    const keeps= ()=>{
+
+    }
+    
+
+    useEffect(() => {
+
+        getAllRooms();
+    }, [])
+
+    const getAllRooms = () => {
+        const socket = io('http://192.168.43.50:4567');
+        socket.on('rooList', data => {
+            setAllRooms(data);
+
+        });
+
     }
     return (
         <View style={style.container}>
@@ -24,45 +51,30 @@ const Chat = () => {
 
             </View>
 
-            <Text style={style.chat}>Chats</Text>
+            <Text style={style.chat}>Communities</Text>
 
-            <TouchableWithoutFeedback onPress={keeps}>
+            {
+                allRooms.map(room => (
+                    <TouchableWithoutFeedback onPress={()=>gotoRoom(room.name)} key={room.id}>
 
-                <View style={style.communityContainer}>
-                    <View style={style.holdCommunity}>
-                        <View>
+                        <View style={style.communityContainer}>
+                            <View style={style.holdCommunity}>
+                                <View>
 
-                            <Image source={require('../../Assets/person.png')} style={style.communityImage} />
+                                    <Image source={require('../../Assets/general_community.png')} style={style.communityImage} />
+                                </View>
+
+                                <View style={{ marginLeft: 10, paddingTop: 10 }}>
+                                    <Text style={style.titleCommunity}>{room.name}</Text>
+                                    <Text style={style.subTextCommunity}>{room.slogan}</Text>
+                                </View>
+                            </View>
+
+                            {/* <Text style={style.timeStamp}>1:41 PM</Text> */}
                         </View>
-
-                        <View style={{ marginLeft: 10, paddingTop: 10 }}>
-                            <Text style={style.titleCommunity}>Abled People, Not disabled</Text>
-                            <Text style={style.subTextCommunity}>Meet new people share your views </Text>
-                        </View>
-                    </View>
-
-                    <Text style={style.timeStamp}>1:41 PM</Text>
-                </View>
-            </TouchableWithoutFeedback>
-
-            <TouchableWithoutFeedback onPress={keeps}>
-
-                <View style={style.communityContainer}>
-                    <View style={style.holdCommunity}>
-                        <View>
-
-                            <Image source={require('../../Assets/dog.png')} style={style.communityImage} />
-                        </View>
-
-                        <View style={{ marginLeft: 10, paddingTop: 10 }}>
-                            <Text style={style.titleCommunity}>Dog Lover's Group</Text>
-                            <Text style={style.subTextCommunity}>Meet dog lover here </Text>
-                        </View>
-                    </View>
-
-                    <Text style={style.timeStamp}>1:41 PM</Text>
-                </View>
-            </TouchableWithoutFeedback>
+                    </TouchableWithoutFeedback>
+                ))
+            }
 
 
 

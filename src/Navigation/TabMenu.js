@@ -9,8 +9,27 @@ import VideoConference from '../Screens/auth/VideoConference';
 import Chat from "../Navigation/ChatMenu";
 import colors from "../Utils/color";
 const Nav = createBottomTabNavigator();
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 const TabMenu = () => {
+    // const tabVisibility =(route)=>{
+    //     const routeName = route.this.state
+
+    //     ? route.state.route[route.state.index].name
+    //     : '';
+
+    //     if(routeName === 'ChatScreen'){
+    //         return false;
+    //     }
+
+    //     return true;
+
+    // }
+
+    const getTabBarVisibility = (route) => {
+        const routeName = getFocusedRouteNameFromRoute(route);
+        return ChatScreen.indexOf(routeName) <= -1;
+      };
     return (
         <Nav.Navigator screenOptions={{
             headerShown: false,
@@ -28,14 +47,16 @@ const TabMenu = () => {
                 )
             }} />
 
-            <Nav.Screen name="Chating" component={Chat} options={{
+            <Nav.Screen name="Chating" component={Chat} 
+            options={({route})=>({
                 tabBarIcon: () => (
                     <View style={style.allig}>
                         <Ionicons name='chatbox-outline' size={28} color={colors.dark} />
                         <Text style={style.menuText}>Chat</Text>
                     </View>
                 )
-            }} />
+            })}
+             />
 
             <Nav.Screen name="VideoConference" component={VideoConference} options={{
                 tabBarIcon: () => (

@@ -1,71 +1,226 @@
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Image, TouchableWithoutFeedback } from 'react-native';
-import React from 'react';
+import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Image, TouchableWithoutFeedback, Pressable, FlatList } from 'react-native';
+import React, { useState, useEffect, useContext, useCallback, useRef,useLayoutEffect } from 'react';
 import colors from '../../Utils/color';
 import Feather from 'react-native-vector-icons/Feather';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import io from 'socket.io-client';
+import { GiftedChat } from 'react-native-gifted-chat';
+import { AuthLoginContext } from '../../Provider/AuthLoginContext';
+
+
 
 
 
 const ChatScreen = () => {
+    const { fname, userId, } = useContext(AuthLoginContext);
+
     const navigation = useNavigation();
-    const keeps = () => {
-        console.log('ok')
+    const [groupName, setGroupName] = useState('');
+    const [groupimg, setGroupImg] = useState('');
+    const [msg, setMsg] = useState('');
+    const [conversations, setConversations] = useState([]);
+    const currentRef = useRef();
+    const [messages, setMessages] = useState([]);
+
+    const socket = io('http://192.168.43.50:4567');
+    
+
+    useLayoutEffect(() => {
+        setMessages([
+            {
+              _id: 1,
+              text: 'Welcome',
+              createdAt: new Date(),
+              user: {
+                _id: 2,
+                name: 'React Native',
+                avatar: 'https://placeimg.com/140/140/any',
+              },
+            },
+          ])
+      }, [])
+
+
+      useEffect(()=>{
+        connectChat();
+        
+      },[socket])
+
+      const msgFormat =(msgChat)=>{
+        const msgObject = {
+            _id:2,
+            text:msgChat,
+            createdAt: Date(),
+            user:{
+                _id:userId,
+                name:fname,
+                avatar:require('../../Assets/profile.png')
+            }
+        }
+
+        return msgObject;
+      }
+    
+      const onSend = useCallback((messages = []) => {
+        socket.emit('chatMessage', messages);
+         connectChat();
+        
+      }, [])
+
+
+
+
+    const connectChat = () => {
+        socket.on('message', messages=>{
+            console.log(messages);
+            setMessages(previousMessages =>
+                GiftedChat.append(previousMessages, messages),
+              );
+        });
+        
+        // socket.on('message', message => {
+        //     const prevChat = [...conversations];
+        //     setConversations(prevChat.concat(message));
+        // })
+
     }
 
-    const nav = ()=>{
-        navigation.pop();
-    }
+    // const evalDef = async () => {
+    //     const name = await AsyncStorage.getItem('chatName');
+    //     const img = await AsyncStorage.getItem('chatImg');
+
+    //     setGroupImg(img);
+    //     setGroupName(name)
+    // }
+
+    // const formatTime = () => {
+
+    //     const today = new Date();
+    //     var h = today.getHours();
+    //     var m = today.getMinutes();
+
+    //     return h + ":" + m;
+    // }
+
+    // const uniqueKey = ()=>{
+    //     const today = new Date();
+    //     const time = today.getTime();
+    //     return time;
+    // }
+    // const sendChat = () => {
+    //     if (msg.length < 1) {
+            
+    //     } else {
+    //         const newMsg = {
+    //             user: fname,
+    //             text: msg,
+    //             _id: userId,
+    //             createdAT: formatTime(),
+    //             key: uniqueKey()
+    //         }
+    //         socket.emit('chatMessage', newMsg);
+    //         setMsg('');
+    //     }
+    // }
+
+    // const setTextMsg = (val) => {
+    //     setMsg(val);
+    // }
+
+    // const Chats = ({ item }) => (
+    
+    //     <View style={{ flexDirection: 'row', alignItems: 'baseline' }}  >
+    //         <Image source={require('../../Assets/profile.png')}
+    //             style={{ width: 20, height: 20, borderRadius: 50, marginRight: 5, }} />
+
+    //         <View style={style.externalText}>
+    //             <Text style={style.chatName}>{item.user}</Text>
+    //             <Text>{item.text}</Text>
+    //             <Text style={style.timeStampExt}>{item.createdAT}</Text>
+    //         </View>
+
+    //     </View>
+    // )
+
+
+
     return (
-        <View style={style.container}>
-            <View>
+        <GiftedChat
+            messages={messages}
+            onSend={messages => onSend(messages)}
+            user={{
+                _id: userId,
+                name:fname,
+                avatar: require('../../Assets/profile.png')
+            }}
+        />
+        // <View style={style.container}>
+            
+        //         <View style={style.topBar}>
 
-                <View style={style.topBar}>
-                    <TouchableWithoutFeedback onPress={nav}>
-                        <AntDesign name='arrowleft' size={24} style={{ marginTop: 10 }} />
-                    </TouchableWithoutFeedback>
+        //             <Image source={require(`../../Assets/default_community.png`)} style={{ width: 40, height: 40, borderRadius: 50, marginLeft: 40, marginRight: 20 }} />
+        //             <Text style={{ marginTop: 10, color: colors.dark, fontWeight: '700' }} >{groupName}</Text>
+        //         </View>
 
-                    <Image source={require('../../Assets/person.png')} style={{ width: 40, height: 40, borderRadius: 50, marginLeft: 40, marginRight: 20 }} />
-                    <Text style={{ marginTop: 10, color: colors.dark, fontWeight: '700' }} >Abled People, Not disabled</Text>
-                </View>
-                <ScrollView>
-                    <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-                        <Image source={require('../../Assets/person.png')} style={{ width: 20, height: 20, borderRadius: 50, marginRight: 5, }} />
+        //         <View style={{ height: 500, marginBottom: 34 }}>
+        //             {/* <ScrollView style={{backgroundColor:'green'}}>
+        //             {conversations.map((chats, i) => {
+        //                 return (
+        //                     <View style={{ flexDirection: 'row', alignItems: 'baseline' }} key={i} >
+        //                         <Image source={require('../../Assets/profile.png')}
+        //                             style={{ width: 20, height: 20, borderRadius: 50, marginRight: 5, }} />
 
-                        <View style={style.externalText}>
-                            <Text style={style.chatName}>Wealth</Text>
-                            <Text >
-                                Hello my name is Wealth
-                            </Text>
-                            <Text style={style.timeStampExt}>11:45</Text>
-                        </View>
+        //                         <View style={style.externalText}>
+        //                             <Text style={style.chatName}>{chats.user}</Text>
+        //                             <Text>{chats.text}</Text>
+        //                             <Text style={style.timeStampExt}>{chats.time}</Text>
+        //                         </View>
 
-                    </View>
+        //                     </View>
+        //                 );
+        //             })}
+        //         </ScrollView> */}
 
-                    <View style={style.internalText}>
-                        <Text>Hello Wealth</Text>
-                        <Text style={style.timeStampInt} >
-                            12:00
-                        </Text>
-                    </View>
+        //             {
+        //                 conversations.length > 0 ?
+        //                     <FlatList
+        //                         data={conversations}
+        //                         renderItem={({ item }) => (<Chats item={item} />)}
+        //                         keyExtractor={item => item.key}
+        //                     />
 
-                </ScrollView>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
+        //                     :
+        //                     <View style={{ justifyContent: 'center' }}>
+        //                         <Text style={{ color: colors.white, alignSelf: 'center', marginTop: 10, fontSize: 18, fontWeight: '400' }}>
+        //                             Welcome to {groupName}
+        //                         </Text>
+        //                     </View>
+        //             }
 
-                <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 30 }}>
 
-                    <View style={style.searchBox}>
-                        <TextInput style={{ flex: 1, paddingLeft: 10 }} onChangeText={keeps} placeholder='Message' />
-                    </View>
+        //         </View>
+        
 
-                    <TouchableOpacity onPress={keeps} style={style.searchButton}>
-                        <Feather name={'send'} size={28} color={'#ffffff'} />
-                    </TouchableOpacity>
 
-                </View>
-            </View>
-        </View>
+
+        //     <View style={{ flexDirection: 'row' }}>
+
+        //         <View style={{ flexDirection: 'row', justifyContent: 'center', marginHorizontal: 10 }}>
+
+        //             <View style={style.searchBox}>
+        //                 <TextInput style={{ flex: 1, paddingLeft: 10 }} value={msg} onChangeText={(val) => setTextMsg(val)} placeholder='Message' />
+        //             </View>
+
+        //             <Pressable onPress={sendChat} style={style.searchButton}>
+        //                 <Feather name={'send'} size={28} color={'#ffffff'} />
+        //             </Pressable>
+
+        //         </View>
+        //     </View>
+
+        // </View>
+
     )
 }
 
@@ -73,7 +228,7 @@ export default ChatScreen;
 
 const style = StyleSheet.create({
     container: {
-        padding: 20,
+        paddingTop: 20,
         backgroundColor: colors.bg,
         flex: 1,
         justifyContent: 'space-between'
@@ -105,7 +260,7 @@ const style = StyleSheet.create({
 
     externalText: {
         backgroundColor: colors.externalBgChat,
-        width: '40%',
+        width: '70%',
         padding: 5,
         borderBottomRightRadius: 10,
         borderTopRightRadius: 10,
@@ -116,7 +271,7 @@ const style = StyleSheet.create({
     },
     internalText: {
         backgroundColor: colors.internalBgChat,
-        width: '50%',
+        width: '80%',
         padding: 5,
         borderBottomLeftRadius: 10,
         borderTopRightRadius: 10,
@@ -137,7 +292,8 @@ const style = StyleSheet.create({
     },
     chatName: {
         fontSize: 10,
-        color: colors.btn
+        color: colors.btn,
+        padding: 2
     }
 })
 

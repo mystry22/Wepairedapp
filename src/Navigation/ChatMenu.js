@@ -5,6 +5,7 @@ import ChatScreen from "../Screens/auth/ChatScreen";
 
 const Nav = createStackNavigator();
 const ChatMenu = () => {
+    
     return(
         <Nav.Navigator screenOptions={{
             headerShown:false
@@ -12,7 +13,8 @@ const ChatMenu = () => {
         initialRouteName='Chat'
         >
             <Nav.Screen name="Chat"  component={Chat}/>
-            <Nav.Screen name="ChatScreen"  component={ChatScreen}/>
+            <Nav.Screen name="ChatScreen"  component={ChatScreen}
+            />
          
         </Nav.Navigator>
     )

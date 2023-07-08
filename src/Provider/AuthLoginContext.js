@@ -13,6 +13,7 @@ export const GlobalAuthContext = ({children})=>{
     const [email,setMail] = useState('');
     const [bio,setBio] = useState('');
     const [globalError, setGlobalError] = useState('');
+    const [userId, setUserID] = useState('');
 
 
 
@@ -73,7 +74,7 @@ export const GlobalAuthContext = ({children})=>{
     
     
     return <AuthLoginContext.Provider value={{switched,setWitched,setFname,fname,setMail,
-    email,setBio,bio,setLName,lname,setGlobalError,globalError}}>
+    email,setBio,bio,setLName,lname,setGlobalError,globalError,setUserID,userId}}>
         {children}
     </AuthLoginContext.Provider>
 }
