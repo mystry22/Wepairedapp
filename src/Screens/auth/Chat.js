@@ -5,37 +5,38 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import io from 'socket.io-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getAllRooms} from '../../Utils/requests'
 
 
 const Chat = () => {
     const navigation = useNavigation();
     const [allRooms, setAllRooms] = useState([]);
 
-    const gotoRoom = (name) => {
+    const gotoRoom = (name,channel_id) => {
     
         AsyncStorage.setItem('chatName', name).then(res =>{
-            navigation.navigate('ChatScreen');
+            navigation.navigate('ChatScreen',{channel_id:channel_id});
          })
     }
 
     const keeps= ()=>{
-
+        console.log('search');
     }
     
 
     useEffect(() => {
+        getRooms()
+        
+    }, [allRooms])
 
-        getAllRooms();
-    }, [])
-
-    const getAllRooms = () => {
-        const socket = io('http://192.168.43.50:4567');
-        socket.on('rooList', data => {
-            setAllRooms(data);
-
-        });
-
+    const getRooms =async()=>{
+        const res = await getAllRooms();
+        if(res){
+            setAllRooms(res)
+        }
     }
+
+    
     return (
         <View style={style.container}>
 
@@ -53,9 +54,12 @@ const Chat = () => {
 
             <Text style={style.chat}>Communities</Text>
 
-            {
+            {  allRooms && allRooms[0] 
+            
+                        ?
+
                 allRooms.map(room => (
-                    <TouchableWithoutFeedback onPress={()=>gotoRoom(room.name)} key={room.id}>
+                    <TouchableWithoutFeedback onPress={()=>gotoRoom(room.channel_name,room.channel_id)} key={room._id}>
 
                         <View style={style.communityContainer}>
                             <View style={style.holdCommunity}>
@@ -65,8 +69,8 @@ const Chat = () => {
                                 </View>
 
                                 <View style={{ marginLeft: 10, paddingTop: 10 }}>
-                                    <Text style={style.titleCommunity}>{room.name}</Text>
-                                    <Text style={style.subTextCommunity}>{room.slogan}</Text>
+                                    <Text style={style.titleCommunity}>{room.channel_name}</Text>
+                                    <Text style={style.subTextCommunity}>{room.channel_slogan}</Text>
                                 </View>
                             </View>
 
@@ -74,6 +78,9 @@ const Chat = () => {
                         </View>
                     </TouchableWithoutFeedback>
                 ))
+                :
+
+                <Text>No Room Available</Text>
             }
 
 

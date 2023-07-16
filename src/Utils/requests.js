@@ -51,6 +51,34 @@ const getUserDetails = async()=>{
     return res;
 }
 
+const getAllRooms = async()=>{
+    const response = await fetch('http://192.168.43.50:3222/api/chatops/getRooms',
+    {
+        method:'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    const res = response.json();
+    return res;
+    
+}
+
+const getChats = async(data)=>{
+    const response = await fetch('http://192.168.43.50:3222/api/chatops/conversations',
+    {
+        method:'POST',
+        body: data,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    const res = response.json();
+    return res;
+}
+
 
 
 
@@ -59,5 +87,7 @@ const getUserDetails = async()=>{
 export {
     signUp,
     signIn,
-    getUserDetails
+    getUserDetails,
+    getAllRooms,
+    getChats
 } 

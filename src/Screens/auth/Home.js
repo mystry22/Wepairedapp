@@ -5,7 +5,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { getUserDetails } from '../../Utils/requests';
 import { AuthLoginContext } from '../../Provider/AuthLoginContext';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Home = () => {
@@ -15,8 +14,18 @@ const Home = () => {
 
     useEffect(() => {
         getAllUsers();
-        
+
     }, [])
+
+    const locaData = [
+
+        { community_name: 'The Deaf Community', Channel_ID: '81119278', Def_Image: require('../../Assets/deaf_community.png'), Sub_Text: 'united we stand, divided we fall' },
+        { community_name: 'The Mute community', Channel_ID: '4110622', Def_Image: require('../../Assets/mute_community.png'), Sub_Text: 'We dream big over here' },
+        { community_name: 'The Gospel Community', Channel_ID: '51219189', Def_Image: require('../../Assets/gospel_community.png'), Sub_Text: 'The beauty of the Gospel' },
+        { community_name: 'The General Community', Channel_ID: '94963569', Def_Image: require('../../Assets/general_community.png'), Sub_Text: 'Meet new people share your views' }
+
+    ]
+
     const getAllUsers = async () => {
         const res = await getUserDetails();
         setFname(res.postUser.name);
@@ -31,18 +40,17 @@ const Home = () => {
         console.log('ok');
     }
 
-    const gotochat =  () => {
-
-         AsyncStorage.setItem('chatName', 'The Deaf Community').then(res =>{
-            navigation.navigate('Chating',{ screen: 'ChatScreen' });
-         })
-        //await AsyncStorage.setItem('chatImg', 'deaf_community.png');
-
-        
-        
-
+    const gotochat = async (name, roomID) => {
+        navigation.navigate('Chating', {
+            screen: 'ChatScreenDef',
+            params: {
+                chatName: name,
+                room_id: roomID
+            }
+        });
 
     }
+
 
     const goToCreate = () => {
         navigation.navigate('CreateCommunity');
@@ -106,15 +114,53 @@ const Home = () => {
 
             {/* Default Communities */}
 
-            <TouchableWithoutFeedback onPress={gotochat}>
+            {
+                locaData.map(rooms => (
+                    <TouchableWithoutFeedback onPress={() => gotochat(rooms.community_name, rooms.Channel_ID)} key={rooms.Channel_ID} >
 
+                        <View style={style.communityContainer}>
+                            <View style={style.holdCommunity}>
+                                <Image source={rooms.Def_Image} style={style.communityImage} />
+
+                                <View style={{ marginLeft: 10, paddingTop: 10 }}>
+                                    <Text style={style.titleCommunity}>{rooms.community_name}</Text>
+                                    <Text style={style.subTextCommunity}>{rooms.Sub_Text} </Text>
+                                </View>
+                            </View>
+
+                            <AntDesign name='right' size={28} style={{ paddingTop: 10 }} />
+                        </View>
+                    </TouchableWithoutFeedback>
+                ))
+            }
+
+
+
+
+            {/* <TouchableWithoutFeedback onPress={() => gotochat('The Mute community', '4110622')}>
                 <View style={style.communityContainer}>
                     <View style={style.holdCommunity}>
-                        <Image source={require('../../Assets/deaf_community.png')} style={style.communityImage} />
+                        <Image source={require('../../Assets/mute_community.png')} style={style.communityImage} />
 
                         <View style={{ marginLeft: 10, paddingTop: 10 }}>
-                            <Text style={style.titleCommunity}>The Deaf Community</Text>
-                            <Text style={style.subTextCommunity}>united we stand, divided we fall </Text>
+                            <Text style={style.titleCommunity}>The Mute Community</Text>
+                            <Text style={style.subTextCommunity}>We dream big over here </Text>
+                        </View>
+                    </View>
+
+                    <AntDesign name='right' size={28} style={{ paddingTop: 10 }} />
+                </View>
+
+            </TouchableWithoutFeedback>
+
+            <TouchableWithoutFeedback onPress={() => gotochat('The Gospel Community', '51219189')}>
+                <View style={style.communityContainer}>
+                    <View style={style.holdCommunity}>
+                        <Image source={require('../../Assets/gospel_community.png')} style={style.communityImage} />
+
+                        <View style={{ marginLeft: 10, paddingTop: 10 }}>
+                            <Text style={style.titleCommunity}>The Gospel Community</Text>
+                            <Text style={style.subTextCommunity}>The beauty of the Gospel </Text>
                         </View>
                     </View>
 
@@ -122,47 +168,20 @@ const Home = () => {
                 </View>
             </TouchableWithoutFeedback>
 
+            <TouchableWithoutFeedback onPress={() => gotochat('The General Community', '94963569')}>
+                <View style={style.communityContainer}>
+                    <View style={style.holdCommunity}>
+                        <Image source={require('../../Assets/general_community.png')} style={style.communityImage} />
 
-            <View style={style.communityContainer}>
-                <View style={style.holdCommunity}>
-                    <Image source={require('../../Assets/mute_community.png')} style={style.communityImage} />
-
-                    <View style={{ marginLeft: 10, paddingTop: 10 }}>
-                        <Text style={style.titleCommunity}>The Mute Community</Text>
-                        <Text style={style.subTextCommunity}>We dream big over here </Text>
+                        <View style={{ marginLeft: 10, paddingTop: 10 }}>
+                            <Text style={style.titleCommunity}>The General Community</Text>
+                            <Text style={style.subTextCommunity}>Meet new people share your views </Text>
+                        </View>
                     </View>
+
+                    <AntDesign name='right' size={28} style={{ paddingTop: 10 }} />
                 </View>
-
-                <AntDesign name='right' size={28} style={{ paddingTop: 10 }} />
-            </View>
-
-
-            <View style={style.communityContainer}>
-                <View style={style.holdCommunity}>
-                    <Image source={require('../../Assets/gospel_community.png')} style={style.communityImage} />
-
-                    <View style={{ marginLeft: 10, paddingTop: 10 }}>
-                        <Text style={style.titleCommunity}>The Gospel Community</Text>
-                        <Text style={style.subTextCommunity}>The beauty of the Gospel </Text>
-                    </View>
-                </View>
-
-                <AntDesign name='right' size={28} style={{ paddingTop: 10 }} />
-            </View>
-
-
-            <View style={style.communityContainer}>
-                <View style={style.holdCommunity}>
-                    <Image source={require('../../Assets/general_community.png')} style={style.communityImage} />
-
-                    <View style={{ marginLeft: 10, paddingTop: 10 }}>
-                        <Text style={style.titleCommunity}>The General Community</Text>
-                        <Text style={style.subTextCommunity}>Meet new people share your views </Text>
-                    </View>
-                </View>
-
-                <AntDesign name='right' size={28} style={{ paddingTop: 10 }} />
-            </View>
+            </TouchableWithoutFeedback> */}
 
         </ScrollView>
     )

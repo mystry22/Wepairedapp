@@ -1,9 +1,8 @@
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Image, TouchableWithoutFeedback, Pressable, FlatList } from 'react-native';
-import React, { useState, useEffect, useContext, useCallback, useRef, useLayoutEffect } from 'react';
+import { View, Text, StyleSheet, TextInput,  Image, TouchableWithoutFeedback, Pressable, FlatList } from 'react-native';
+import React, { useState, useEffect, useContext, } from 'react';
 import colors from '../../Utils/color';
 import Feather from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import io from 'socket.io-client';
 import { AuthLoginContext } from '../../Provider/AuthLoginContext';
 import Loader from '../../Utils/Loader';
@@ -14,46 +13,51 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 
 
-const ChatScreen = ({ route }) => {
+const ChatScreenDef = ({route}) => {
     const { fname, userId, conversations, setConversation } = useContext(AuthLoginContext);
 
     const navigation = useNavigation();
     const [groupName, setGroupName] = useState('');
-    const [groupimg, setGroupImg] = useState('');
     const [currentRoom, setCurrentRoom] = useState('');
-
     const [msg, setMsg] = useState('');
 
-    
 
+    let name = '';
 
     const socket = io('http://192.168.43.50:4567');
     const gotoChat = () => {
         navigation.navigate('Chat');
     }
 
-    
+
 
     useEffect(() => {
         evalDef();
         joinRoom();
     }, [])
 
+   
 
 
-    const joinRoom = () => {
+
+    const joinRoom = async() => {
         const data = {
             name: fname,
-            room_id: route.params.channel_id,
+            room_id: currentRoom,
             user_id: userId,
             key: uniqueKey(),
         }
-        setCurrentRoom(route.params.channel_id);
+
         socket.emit('joinRoom', data)
 
         connectChat();
 
     }
+
+
+
+
+
 
 
     const connectChat = () => {
@@ -66,19 +70,24 @@ const ChatScreen = ({ route }) => {
 
     }
 
-    const evalDef = async () => {
-        const name = await AsyncStorage.getItem('chatName');
-        const img = await AsyncStorage.getItem('chatImg');
-
-        setGroupImg(img);
-        setGroupName(name)
+    const evalDef = () => {
+        
+        setCurrentRoom(route.params.room_id);
+        
     }
+
+    const getName =()=>{
+        name = route.params.chatName;
+        return name;
+    }
+
 
     const uniqueKey = () => {
         const random = Math.floor(Math.random() * 100000000);
         return random;
     }
     const sendChat = () => {
+
         if (msg.length < 1) {
 
         } else {
@@ -160,7 +169,7 @@ const ChatScreen = ({ route }) => {
                             <AntDesign name={'arrowleft'} size={28} />
                         </TouchableWithoutFeedback>
                         <Image source={require(`../../Assets/default_community.png`)} style={{ width: 40, height: 40, borderRadius: 50, marginLeft: 40, marginRight: 20 }} />
-                        <Text style={{ marginTop: 10, color: colors.dark, fontWeight: '700' }} >{groupName}</Text>
+                        <Text style={{ marginTop: 10, color: colors.dark, fontWeight: '700' }} >{getName()}</Text>
                     </View>
 
                     <View style={{ height: 500, marginBottom: 34 }}>
@@ -177,14 +186,13 @@ const ChatScreen = ({ route }) => {
                                 :
                                 <View style={{ justifyContent: 'center' }}>
                                     <Text style={{ color: colors.btn, alignSelf: 'center', marginTop: 10, fontSize: 18, fontWeight: '400' }}>
-                                        Welcome to {groupName}
+                                        Welcome to {getName()}
                                     </Text>
                                 </View>
                         }
 
 
                     </View>
-
 
 
 
@@ -213,7 +221,7 @@ const ChatScreen = ({ route }) => {
     )
 }
 
-export default ChatScreen;
+export default ChatScreenDef;
 
 const style = StyleSheet.create({
     container: {
