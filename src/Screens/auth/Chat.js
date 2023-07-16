@@ -11,6 +11,9 @@ import {getAllRooms} from '../../Utils/requests'
 const Chat = () => {
     const navigation = useNavigation();
     const [allRooms, setAllRooms] = useState([]);
+    
+    const socket = io('https://wepairedbackend.onrender.com');
+
 
     const gotoRoom = (name,channel_id) => {
     
@@ -29,11 +32,23 @@ const Chat = () => {
         
     }, [allRooms])
 
-    const getRooms =async()=>{
-        const res = await getAllRooms();
-        if(res){
-            setAllRooms(res)
-        }
+    // const getRooms =async()=>{
+    //     const res = await getAllRooms();
+    //     if(res){
+    //         setAllRooms(res)
+    //     }
+    // }
+
+    const getRooms = async() => {
+
+        socket.emit('getRooms');
+        socket.on('roomList',(roomlist)=>{
+             setAllRooms(roomlist);
+        })
+    
+
+
+
     }
 
     

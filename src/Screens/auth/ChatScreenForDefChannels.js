@@ -17,14 +17,13 @@ const ChatScreenDef = ({route}) => {
     const { fname, userId, conversations, setConversation } = useContext(AuthLoginContext);
 
     const navigation = useNavigation();
-    const [groupName, setGroupName] = useState('');
     const [currentRoom, setCurrentRoom] = useState('');
     const [msg, setMsg] = useState('');
 
 
     let name = '';
 
-    const socket = io('http://192.168.43.50:4567');
+    const socket = io('https://wepairedbackend.onrender.com');
     const gotoChat = () => {
         navigation.navigate('Chat');
     }
@@ -43,7 +42,7 @@ const ChatScreenDef = ({route}) => {
     const joinRoom = async() => {
         const data = {
             name: fname,
-            room_id: currentRoom,
+            room_id: getRoomID(),
             user_id: userId,
             key: uniqueKey(),
         }
@@ -81,6 +80,11 @@ const ChatScreenDef = ({route}) => {
         return name;
     }
 
+    const getRoomID = ()=>{
+        const Def_room_id = route.params.room_id;
+        return Def_room_id;
+    }
+
 
     const uniqueKey = () => {
         const random = Math.floor(Math.random() * 100000000);
@@ -97,7 +101,7 @@ const ChatScreenDef = ({route}) => {
                 _id: userId,
                 createdAT: Date(),
                 key: uniqueKey(),
-                room_id: currentRoom
+                room_id: getRoomID()
             }
             socket.emit('chatMessage', newMsg);
             setMsg('');
@@ -122,7 +126,7 @@ const ChatScreenDef = ({route}) => {
             <>
                 {
                     isLocalUser ?
-                        <View style={style.internalText}>
+                        <View style={style.internalText} key={item.key}>
                             <Text>{item.text}</Text>
                             <Text style={style.timeStampInt}>{item.createdAt}</Text>
 
@@ -134,7 +138,7 @@ const ChatScreenDef = ({route}) => {
                             <Image source={require('../../Assets/profile.png')}
                                 style={{ width: 20, height: 20, borderRadius: 50, marginRight: 5, }} />
 
-                            <View style={style.externalText}>
+                            <View style={style.externalText} key={item.key}>
                                 <Text style={style.chatName}>{item.name}</Text>
                                 <Text>{item.text}</Text>
                                 <Text style={style.timeStampExt}>{item.createdAt}</Text>
@@ -172,14 +176,14 @@ const ChatScreenDef = ({route}) => {
                         <Text style={{ marginTop: 10, color: colors.dark, fontWeight: '700' }} >{getName()}</Text>
                     </View>
 
-                    <View style={{ height: 500, marginBottom: 34 }}>
+                    
 
 
                         {
                             conversations && conversations[0] ?
                                 <FlatList
                                     data={conversations}
-                                    renderItem={({ item }) => (<Chats item={item} />)}
+                                    renderItem={({ item }) => (<Chats item={item} key={item.key} />)}
                                     keyExtractor={item => item.key}
                                 />
 
@@ -192,7 +196,7 @@ const ChatScreenDef = ({route}) => {
                         }
 
 
-                    </View>
+                    
 
 
 

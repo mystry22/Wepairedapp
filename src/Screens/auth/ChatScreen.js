@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Image, TouchableWithoutFeedback, Pressable, FlatList } from 'react-native';
-import React, { useState, useEffect, useContext, useCallback, useRef, useLayoutEffect } from 'react';
+import { View, Text, StyleSheet, TextInput, Image, TouchableWithoutFeedback, Pressable, FlatList } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
 import colors from '../../Utils/color';
 import Feather from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
@@ -16,18 +16,18 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const ChatScreen = ({ route }) => {
     const { fname, userId, conversations, setConversation } = useContext(AuthLoginContext);
-
     const navigation = useNavigation();
     const [groupName, setGroupName] = useState('');
     const [groupimg, setGroupImg] = useState('');
     const [currentRoom, setCurrentRoom] = useState('');
 
     const [msg, setMsg] = useState('');
+    
 
     
 
 
-    const socket = io('http://192.168.43.50:4567');
+    const socket = io('https://wepairedbackend.onrender.com');
     const gotoChat = () => {
         navigation.navigate('Chat');
     }
@@ -113,7 +113,7 @@ const ChatScreen = ({ route }) => {
             <>
                 {
                     isLocalUser ?
-                        <View style={style.internalText}>
+                        <View style={style.internalText} key={item.key} >
                             <Text>{item.text}</Text>
                             <Text style={style.timeStampInt}>{item.createdAt}</Text>
 
@@ -125,7 +125,7 @@ const ChatScreen = ({ route }) => {
                             <Image source={require('../../Assets/profile.png')}
                                 style={{ width: 20, height: 20, borderRadius: 50, marginRight: 5, }} />
 
-                            <View style={style.externalText}>
+                            <View style={style.externalText} key={item.key} >
                                 <Text style={style.chatName}>{item.name}</Text>
                                 <Text>{item.text}</Text>
                                 <Text style={style.timeStampExt}>{item.createdAt}</Text>
@@ -163,15 +163,16 @@ const ChatScreen = ({ route }) => {
                         <Text style={{ marginTop: 10, color: colors.dark, fontWeight: '700' }} >{groupName}</Text>
                     </View>
 
-                    <View style={{ height: 500, marginBottom: 34 }}>
+                    
 
 
                         {
                             conversations && conversations[0] ?
                                 <FlatList
                                     data={conversations}
-                                    renderItem={({ item }) => (<Chats item={item} />)}
+                                    renderItem={({ item }) => (<Chats item={item} key={item.key} />)}
                                     keyExtractor={item => item.key}
+                                    
                                 />
 
                                 :
@@ -183,7 +184,7 @@ const ChatScreen = ({ route }) => {
                         }
 
 
-                    </View>
+                    
 
 
 
