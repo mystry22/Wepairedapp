@@ -26,7 +26,7 @@ const CreateCommunity = () => {
       room_id: uniqueKey()
     }
 
-    const socket = io('http://192.168.43.50:4567');
+    const socket = io('https://wepairedbackend.onrender.com');
     socket.emit('createRoom', data);
     socket.on('messages', (res) => {
       
