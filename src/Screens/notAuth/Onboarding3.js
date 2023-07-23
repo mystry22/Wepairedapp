@@ -8,7 +8,8 @@ const width = Dimensions.get('window').width;
 const Onboard3 = () => {
     const navigation = useNavigation();
 
-    const skipNav = ()=>{
+    const skipNav = async()=>{
+        await AsyncStorage.setItem('boarded','boarded');
         navigation.navigate('Signin1');
     }
 

@@ -22,7 +22,8 @@ const Onboard1 = () => {
         }
     }
 
-    const skipNav = ()=>{
+    const skipNav = async()=>{
+        await AsyncStorage.setItem('boarded','boarded');
         navigation.navigate('Signin1');
     }
 

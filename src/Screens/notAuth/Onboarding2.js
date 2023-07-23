@@ -2,12 +2,14 @@ import React from "react";
 import { Text, Image, View, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import colors from "../../Utils/color";
 import Button from '../../Reusable/OnboardButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 const width = Dimensions.get('window').width;
 const Onboard2 = () => {
     const navigation = useNavigation();
 
-    const skipNav = ()=>{
+    const skipNav = async()=>{
+        await AsyncStorage.setItem('boarded','boarded');
         navigation.navigate('Signin1');
     }
 
