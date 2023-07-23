@@ -26,8 +26,8 @@ const ChatScreen = ({ route }) => {
 
 
 
-    //const socket = io('https://wepairedbackend.onrender.com');
-    const socket = io('http://192.168.43.50:4567')
+    const socket = io('https://wepairedbackend.onrender.com');
+    
     const gotoChat = () => {
         navigation.navigate('Chat');
     }
@@ -53,7 +53,6 @@ const ChatScreen = ({ route }) => {
         }
         setCurrentRoom(route.params.channel_id);
         socket.emit('joinRoom', data);
-        connectChat();
     }
 
     const connectChat = () => {
@@ -66,6 +65,7 @@ const ChatScreen = ({ route }) => {
                 setConversation([]);
             
             }else{
+                console.log(ms);
                 setConversation(ms);
                 
             }

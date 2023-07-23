@@ -23,8 +23,8 @@ const ChatScreenDef = ({route}) => {
 
     let name = '';
 
-    //const socket = io('https://wepairedbackend.onrender.com');
-    const socket = io('http://192.168.43.50:4567');
+    const socket = io('https://wepairedbackend.onrender.com');
+    
 
     const gotoChat = () => {
         navigation.navigate('Home_Screen');
@@ -135,7 +135,7 @@ const ChatScreenDef = ({route}) => {
 
         return (
 
-            <>
+            <React.Fragment key={item.key}>
                 {
                     isLocalUser ?
                         <View style={style.internalText} key={item.key}>
@@ -159,7 +159,7 @@ const ChatScreenDef = ({route}) => {
                         </View>
 
                 }
-            </>
+            </React.Fragment>
 
 
         )

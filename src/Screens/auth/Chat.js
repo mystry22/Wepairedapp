@@ -66,7 +66,7 @@ const Chat = () => {
 
             </View>
 
-            <Text style={style.chat}>Communities</Text>
+            <Text style={style.chat}>Chats</Text>
 
             {  allRooms && allRooms[0] 
             
