@@ -189,7 +189,7 @@ const ChatScreen = ({ route }) => {
 
 
 
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flexDirection: 'row', marginBottom:10 }}>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'center', marginHorizontal: 10 }}>
 
