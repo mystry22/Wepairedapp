@@ -158,8 +158,8 @@ const style = StyleSheet.create({
 
     },
     communityImage: {
-        width: 70,
-        height: 70,
+        width: 60,
+        height: 60,
         borderRadius: 50,
     },
     timeStamp: {

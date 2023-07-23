@@ -42,7 +42,7 @@ const Home = () => {
 
     const gotochat = async (name, roomID) => {
         navigation.navigate(
-             'ChatScreenDef',
+            'ChatScreenDef',
             {
                 chatName: name,
                 room_id: roomID
@@ -50,6 +50,8 @@ const Home = () => {
         );
 
     }
+
+
 
 
     const goToCreate = () => {
@@ -63,28 +65,42 @@ const Home = () => {
 
             <Text style={style.forums}>Forums</Text>
             {/* Forum Scroll */}
-            <ScrollView horizontal={true} style={{ marginBottom: 10 }}>
+            <ScrollView horizontal={true} style={{ marginBottom: 10, height: 80 }}>
 
-                <View style={style.forumsList}>
-                    <Image source={require('../../Assets/politics.png')} style={style.images} />
-                    <Text style={style.forumText}>Politics</Text>
-                </View>
-                <View style={style.forumsList}>
-                    <Image source={require('../../Assets/football.png')} style={style.images} />
-                    <Text style={style.forumText}>Football</Text>
-                </View>
-                <View style={style.forumsList}>
-                    <Image source={require('../../Assets/game.png')} style={style.images} />
-                    <Text style={style.forumText}>Games</Text>
-                </View>
-                <View style={style.forumsList}>
-                    <Image source={require('../../Assets/music.png')} style={style.images} />
-                    <Text style={style.forumText}>Music</Text>
-                </View>
-                <View style={style.forumsList}>
-                    <Image source={require('../../Assets/comedy.png')} style={style.images} />
-                    <Text style={style.forumText}>Comedy</Text>
-                </View>
+                <TouchableWithoutFeedback onPress={()=>gotochat('Politics','88282831')}>
+                    <View style={style.forumsList}>
+                        <Image source={require('../../Assets/politics.png')} style={style.images} />
+                        <Text style={style.forumText}>Politics</Text>
+                    </View>
+                </TouchableWithoutFeedback>
+
+                <TouchableWithoutFeedback onPress={()=>gotochat('FootBall','71417238')}>
+                    <View style={style.forumsList}>
+                        <Image source={require('../../Assets/football.png')} style={style.images} />
+                        <Text style={style.forumText}>Football</Text>
+                    </View>
+                </TouchableWithoutFeedback>
+
+                <TouchableWithoutFeedback onPress={()=>gotochat('Games','19715845')}>
+                    <View style={style.forumsList}>
+                        <Image source={require('../../Assets/game.png')} style={style.images} />
+                        <Text style={style.forumText}>Games</Text>
+                    </View>
+                </TouchableWithoutFeedback>
+
+                <TouchableWithoutFeedback onPress={()=>gotochat('Music','54061211')}>
+                    <View style={style.forumsList}>
+                        <Image source={require('../../Assets/music.png')} style={style.images} />
+                        <Text style={style.forumText}>Music</Text>
+                    </View>
+                </TouchableWithoutFeedback>
+
+                <TouchableWithoutFeedback onPress={()=>gotochat('Commedy','39228147')}>
+                    <View style={style.forumsList}>
+                        <Image source={require('../../Assets/comedy.png')} style={style.images} />
+                        <Text style={style.forumText}>Comedy</Text>
+                    </View>
+                </TouchableWithoutFeedback>
 
             </ScrollView>
 
@@ -137,7 +153,7 @@ const Home = () => {
 
 
 
-            
+
 
         </ScrollView>
     )
@@ -156,7 +172,7 @@ const style = StyleSheet.create({
         fontSize: 30,
         textAlign: 'center',
         fontWeight: '500',
-        marginBottom: 30
+        marginBottom: 20
     },
     forums: {
         color: colors.dark,

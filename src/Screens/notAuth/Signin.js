@@ -87,13 +87,13 @@ const PersonalInformations = () => {
             <Text style={style.login}>Login</Text>
 
             <Text style={style.welcome}>Hi,Welcome Back! </Text>
-            <Text style={style.subtext}>Hello again,you’ve been missed!</Text>
+            <Text style={style.subtext}>Hello again,you have been missed!</Text>
 
             <Input placeholder='Email' password={false} onChangeText={(val)=>{setEmail(val)}} />
 
             <View style={style.textInput}>
 
-                <TextInput placeholder='Enter Password' placeholderTextColor={colors.subtext} secureTextEntry={true} style={{ flex: 1, }} 
+                <TextInput placeholder='Enter Password' placeholderTextColor={colors.subtext} secureTextEntry={true} style={style.designInpText} 
                 onChangeText={(val)=>{setPass(val)}} />
                 <AntDesign name={'eyeo'} size={28} style={{ marginRight: 10 }} />
 
@@ -143,6 +143,10 @@ const style = StyleSheet.create({
         fontWeight: '500',
         marginBottom: 50
     },
+    designInpText:{
+        flex:1,
+        color:colors.dark
+    },
     container: {
         padding: 20,
         backgroundColor: colors.bg,
@@ -157,7 +161,7 @@ const style = StyleSheet.create({
     },
     subtext: {
         color: colors.subtext,
-        fontSize: 12,
+        fontSize: 14,
         fontFamily: 'Roboto',
         lineHeight: 18,
         marginBottom: 35

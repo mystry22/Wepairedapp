@@ -176,4 +176,5 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'center'
     },
+    
 })

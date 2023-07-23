@@ -29,8 +29,6 @@ const styles = StyleSheet.create({
         marginBottom:22,
         backgroundColor: colors.bg,
         color: colors.dark,
-        
-      
       }
 })
 
