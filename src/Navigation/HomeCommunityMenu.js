@@ -4,7 +4,7 @@ import Home from '../Screens/auth/Home'
 import CreateCommunity from "../Screens/auth/CreateCommunity";
 
 const Nav = createStackNavigator();
-const ChatMenu = () => {
+const HomeStack = () => {
     return(
         <Nav.Navigator screenOptions={{
             headerShown:false
@@ -18,4 +18,4 @@ const ChatMenu = () => {
     )
 }
 
-export default ChatMenu;
+export default HomeStack;

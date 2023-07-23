@@ -28,7 +28,8 @@ const styles = StyleSheet.create({
         padding:10,
         marginBottom:22,
         backgroundColor: colors.bg,
-        color: '#b6b6b6',
+        color: colors.dark,
+        
       
       }
 })

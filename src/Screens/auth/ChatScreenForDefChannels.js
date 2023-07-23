@@ -23,9 +23,11 @@ const ChatScreenDef = ({route}) => {
 
     let name = '';
 
-    const socket = io('https://wepairedbackend.onrender.com');
+    //const socket = io('https://wepairedbackend.onrender.com');
+    const socket = io('http://192.168.43.50:4567');
+
     const gotoChat = () => {
-        navigation.navigate('Chat');
+        navigation.navigate('Home_Screen');
     }
 
 
@@ -33,6 +35,7 @@ const ChatScreenDef = ({route}) => {
     useEffect(() => {
         evalDef();
         joinRoom();
+        connectChat();
     }, [])
 
    
@@ -61,8 +64,17 @@ const ChatScreenDef = ({route}) => {
 
     const connectChat = () => {
 
-        socket.on('message', message => {
-            setConversation(message);
+        socket.on('message', (ms) => {
+
+            
+            
+            if(ms.length == 0){
+                setConversation([]);
+            
+            }else{
+                setConversation(ms);
+                
+            }
         })
 
 
@@ -128,7 +140,7 @@ const ChatScreenDef = ({route}) => {
                     isLocalUser ?
                         <View style={style.internalText} key={item.key}>
                             <Text>{item.text}</Text>
-                            <Text style={style.timeStampInt}>{item.createdAt}</Text>
+                            <Text style={style.timeStampInt}>{item.chat_date}</Text>
 
                         </View>
 
@@ -141,7 +153,7 @@ const ChatScreenDef = ({route}) => {
                             <View style={style.externalText} key={item.key}>
                                 <Text style={style.chatName}>{item.name}</Text>
                                 <Text>{item.text}</Text>
-                                <Text style={style.timeStampExt}>{item.createdAt}</Text>
+                                <Text style={style.timeStampExt}>{item.chat_date}</Text>
                             </View>
 
                         </View>

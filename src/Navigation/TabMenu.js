@@ -6,10 +6,9 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Home from "../Navigation/HomeCommunityMenu";
 import Profile from "../Screens/auth/Profile";
 import VideoConference from '../Screens/auth/VideoConference';
-import Chat from "../Navigation/ChatMenu";
+import Chat from "../Screens/auth/Chat";
 import colors from "../Utils/color";
 const Nav = createBottomTabNavigator();
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 const TabMenu = () => {
     // const tabVisibility =(route)=>{
@@ -26,17 +25,15 @@ const TabMenu = () => {
 
     // }
 
-    const getTabBarVisibility = (route) => {
-        const routeName = getFocusedRouteNameFromRoute(route);
-        return ChatScreen.indexOf(routeName) <= -1;
-      };
     return (
         <Nav.Navigator screenOptions={{
             headerShown: false,
             tabBarShowLabel: false,
 
 
-        }}>
+        }}
+        
+        >
             <Nav.Screen name="Home" component={Home} options={{
                 tabBarIcon: () => (
                     <View style={style.allig}>
@@ -47,7 +44,7 @@ const TabMenu = () => {
                 )
             }} />
 
-            <Nav.Screen name="Chating" component={Chat} 
+            <Nav.Screen name="Chat" component={Chat} 
             options={({route})=>({
                 tabBarIcon: () => (
                     <View style={style.allig}>

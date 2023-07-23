@@ -17,9 +17,6 @@ const CreateCommunity = () => {
 
   const createRoom = () => {
     setIndicate('yes');
-
-
-
     const data = {
       roomName: roomName,
       slogan: slogan,
@@ -27,36 +24,49 @@ const CreateCommunity = () => {
     }
 
     const socket = io('https://wepairedbackend.onrender.com');
+    if(roomName.length > 0 && slogan.length > 0){
     socket.emit('createRoom', data);
-    socket.on('messages', (res) => {
+      socket.on('messages', (res) => {
       
-      if (res == 'ok') {
-        setRoomName('');
-        setSlogan('');
-        setIndicate('no');
-        Alert.alert('Success', 'New Room Created', [
-          {
-            text: 'OK',
-            onPress: () => {},
-            style: 'cancel',
-          },
+        if (res == 'ok') {
+          setRoomName('');
+          setSlogan('');
+          setIndicate('no');
+          Alert.alert('Success', 'New Room Created', [
+            {
+              text: 'OK',
+              onPress: () => {},
+              style: 'cancel',
+            },
+            
+          ]);
           
-        ]);
-        
-        
-
-      } else {
-        setIndicate('no');
-        Alert.alert('Success', 'Unable to create room', [
-          {
-            text: 'OK',
-            onPress: () => {},
-            style: 'cancel',
-          },
           
-        ]);
-      }
-    })
+  
+        } else {
+          setIndicate('no');
+          Alert.alert('Success', 'Unable to create room', [
+            {
+              text: 'OK',
+              onPress: () => {},
+              style: 'cancel',
+            },
+            
+          ]);
+        }
+      })
+    }else{
+      setIndicate('no');
+      Alert.alert('Error', 'Validation Error', [
+        {
+          text: 'OK',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        
+      ]);
+    }
+    
 
 
   }

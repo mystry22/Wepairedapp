@@ -1,11 +1,10 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import colors from '../../Utils/color';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import io from 'socket.io-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getAllRooms} from '../../Utils/requests'
 
 
 const Chat = () => {
@@ -53,7 +52,7 @@ const Chat = () => {
 
     
     return (
-        <View style={style.container}>
+        <ScrollView style={style.container}>
 
             <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 30 }}>
 
@@ -100,7 +99,7 @@ const Chat = () => {
 
 
 
-        </View>
+        </ScrollView>
     )
 }
 

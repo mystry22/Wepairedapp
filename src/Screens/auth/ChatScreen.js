@@ -20,28 +20,31 @@ const ChatScreen = ({ route }) => {
     const [groupName, setGroupName] = useState('');
     const [groupimg, setGroupImg] = useState('');
     const [currentRoom, setCurrentRoom] = useState('');
+    let converses = [];
 
     const [msg, setMsg] = useState('');
-    
-
-    
 
 
-    const socket = io('https://wepairedbackend.onrender.com');
+
+    //const socket = io('https://wepairedbackend.onrender.com');
+    const socket = io('http://192.168.43.50:4567')
     const gotoChat = () => {
         navigation.navigate('Chat');
     }
 
-    
+
 
     useEffect(() => {
         evalDef();
         joinRoom();
+        connectChat();
+        
     }, [])
 
 
 
     const joinRoom = () => {
+        
         const data = {
             name: fname,
             room_id: route.params.channel_id,
@@ -49,20 +52,24 @@ const ChatScreen = ({ route }) => {
             key: uniqueKey(),
         }
         setCurrentRoom(route.params.channel_id);
-        socket.emit('joinRoom', data)
-
+        socket.emit('joinRoom', data);
         connectChat();
-
     }
 
-
     const connectChat = () => {
+        
+        socket.on('message', (ms) => {
 
-        socket.on('message', message => {
-            setConversation(message);
+            
+            
+            if(ms.length == 0){
+                setConversation([]);
+            
+            }else{
+                setConversation(ms);
+                
+            }
         })
-
-
 
     }
 
@@ -82,6 +89,7 @@ const ChatScreen = ({ route }) => {
         if (msg.length < 1) {
 
         } else {
+            
             const newMsg = {
                 name: fname,
                 text: msg,
@@ -103,49 +111,41 @@ const ChatScreen = ({ route }) => {
 
 
 
-
     const Chats = ({ item }) => {
 
         const isLocalUser = userId == item.user_id;
 
         return (
 
-            <>
+            <React.Fragment key={item.key}>
                 {
                     isLocalUser ?
-                        <View style={style.internalText} key={item.key} >
+                        <View style={style.internalText} >
                             <Text>{item.text}</Text>
-                            <Text style={style.timeStampInt}>{item.createdAt}</Text>
+                            <Text style={style.timeStampInt}>{item.chat_date}</Text>
 
                         </View>
 
                         :
 
-                        <View style={{ flexDirection: 'row', alignItems: 'baseline' }} key={item.key} >
+                        <View style={{ flexDirection: 'row', alignItems: 'baseline' }} >
                             <Image source={require('../../Assets/profile.png')}
                                 style={{ width: 20, height: 20, borderRadius: 50, marginRight: 5, }} />
 
-                            <View style={style.externalText} key={item.key} >
+                            <View style={style.externalText}>
                                 <Text style={style.chatName}>{item.name}</Text>
                                 <Text>{item.text}</Text>
-                                <Text style={style.timeStampExt}>{item.createdAt}</Text>
+                                <Text style={style.timeStampExt}>{item.chat_date}</Text>
                             </View>
 
                         </View>
 
                 }
-            </>
+            </React.Fragment>
 
 
         )
     }
-
-
-
-
-
-
-
 
     return (
 
@@ -163,28 +163,28 @@ const ChatScreen = ({ route }) => {
                         <Text style={{ marginTop: 10, color: colors.dark, fontWeight: '700' }} >{groupName}</Text>
                     </View>
 
-                    
 
 
-                        {
-                            conversations && conversations[0] ?
-                                <FlatList
-                                    data={conversations}
-                                    renderItem={({ item }) => (<Chats item={item} key={item.key} />)}
-                                    keyExtractor={item => item.key}
-                                    
-                                />
 
-                                :
-                                <View style={{ justifyContent: 'center' }}>
-                                    <Text style={{ color: colors.btn, alignSelf: 'center', marginTop: 10, fontSize: 18, fontWeight: '400' }}>
-                                        Welcome to {groupName}
-                                    </Text>
-                                </View>
-                        }
+                    {
+                        conversations && conversations[0] ?
+                            <FlatList
+                                data={conversations}
+                                renderItem={({ item }) => (<Chats item={item}  />)}
+                                keyExtractor={item => item.key}
+
+                            />
+
+                            :
+                            <View style={{ justifyContent: 'center' }}>
+                                <Text style={{ color: colors.btn, alignSelf: 'center', marginTop: 10, fontSize: 18, fontWeight: '400' }}>
+                                    Welcome to {groupName}
+                                </Text>
+                            </View>
+                    }
 
 
-                    
+
 
 
 
